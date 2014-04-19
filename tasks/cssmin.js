@@ -42,7 +42,12 @@ module.exports = function(grunt) {
       var min = valid.map(function(file) {
         var src = grunt.file.read(file);
         max += src;
-        options.relativeTo = path.dirname(file);
+        // Try to auto-detect and set the "relativeTo" option ONLY if the caller had not
+        // set it already. This ensures that the caller has a stronger say in the options
+        // being passed to clean-css.
+        if (!options.relativeTo) {
+          options.relativeTo = path.dirname(f);
+        }
         return minify(src, options);
       }).join('');
 
